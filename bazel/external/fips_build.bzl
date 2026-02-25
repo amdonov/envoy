@@ -13,7 +13,7 @@ if [[ "%s" == "libc++" ]]; then
     export LDFLAGS="-fuse-ld=lld -l:libc++.a -l:libc++abi.a -lm -pthread --sysroot=$${SYSROOT}"
 else
     export CXXFLAGS="--sysroot=$${SYSROOT}"
-    LDFLAGS="-fuse-ld=lld -static-libstdc++ -static-libgcc -lm -pthread --sysroot=$${SYSROOT}"
+    export LDFLAGS="-fuse-ld=lld -lstdc++ -lm -pthread --sysroot=$${SYSROOT}"
 fi
 export CGO_CFLAGS="--sysroot=$${SYSROOT}"
 export CGO_CXXFLAGS="$${CXXFLAGS}"
@@ -70,7 +70,7 @@ if [[ "%s" == "libc++" ]]; then
     export LDFLAGS="-fuse-ld=lld -l:libc++.a -l:libc++abi.a -lm -pthread --sysroot=$${SYSROOT}"
 else
     export CXXFLAGS="--sysroot=$${SYSROOT}"
-    export LDFLAGS="-fuse-ld=lld -static-libstdc++ -static-libgcc -lm -pthread --sysroot=$${SYSROOT}"
+    export LDFLAGS="-fuse-ld=lld -lstdc++ -lm -pthread --sysroot=$${SYSROOT}"
 fi
 cd $$SRC_DIR
 OUTPUT=$$(mktemp)
