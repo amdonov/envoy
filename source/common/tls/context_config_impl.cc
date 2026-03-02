@@ -196,9 +196,7 @@ ContextConfigImpl::ContextConfigImpl(
       alpn_protocols_(RepeatedPtrUtil::join(config.alpn_protocols(), ",")),
       cipher_suites_(StringUtil::nonEmptyStringOrDefault(
           RepeatedPtrUtil::join(config.tls_params().cipher_suites(), ":"), default_cipher_suites)),
-      tls13_cipher_suites_(StringUtil::nonEmptyStringOrDefault(
-          RepeatedPtrUtil::join(config.tls_params().tls13_cipher_suites(), ":"),
-          default_tls13_cipher_suites)),
+      tls13_cipher_suites_(default_tls13_cipher_suites),
       ecdh_curves_(StringUtil::nonEmptyStringOrDefault(
           RepeatedPtrUtil::join(config.tls_params().ecdh_curves(), ":"), default_curves)),
       signature_algorithms_(RepeatedPtrUtil::join(config.tls_params().signature_algorithms(), ":")),
