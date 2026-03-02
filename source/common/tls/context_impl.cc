@@ -154,6 +154,14 @@ ContextImpl::ContextImpl(
       return;
     }
 
+    // Set TLS 1.3 cipher suites
+    if (!capabilities_.provides_ciphers_and_curves && !config.tls13CipherSuites().empty() &&
+        !SSL_CTX_set_ciphersuites(ctx.ssl_ctx_.get(), config.tls13CipherSuites().c_str())) {
+      creation_status = absl::InvalidArgumentError(
+          absl::StrCat("Failed to initialize TLS 1.3 cipher suites ", config.tls13CipherSuites()));
+      return;
+    }
+
     // Set signature algorithms if given, otherwise fall back to BoringSSL defaults.
     if (!capabilities_.provides_sigalgs && !config.signatureAlgorithms().empty()) {
       if (!SSL_CTX_set1_sigalgs_list(ctx.ssl_ctx_.get(), config.signatureAlgorithms().c_str())) {

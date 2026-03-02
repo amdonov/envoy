@@ -58,6 +58,8 @@ private:
   static const std::string DEFAULT_CIPHER_SUITES_FIPS;
   static const std::string DEFAULT_CURVES;
   static const std::string DEFAULT_CURVES_FIPS;
+  static const std::string DEFAULT_TLS13_CIPHER_SUITES;
+  static const std::string DEFAULT_TLS13_CIPHER_SUITES_FIPS;
 
   const std::vector<std::string> server_names_;
   const bool require_client_certificate_;

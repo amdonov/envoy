@@ -36,6 +36,7 @@ public:
   // Ssl::ContextConfig
   const std::string& alpnProtocols() const override { return alpn_protocols_; }
   const std::string& cipherSuites() const override { return cipher_suites_; }
+  const std::string& tls13CipherSuites() const override { return tls13_cipher_suites_; }
   const std::string& ecdhCurves() const override { return ecdh_curves_; }
   const std::string& signatureAlgorithms() const override { return signature_algorithms_; }
   absl::optional<envoy::extensions::transport_sockets::tls::v3::TlsParameters::CompliancePolicy>
@@ -89,7 +90,9 @@ protected:
   ContextConfigImpl(const envoy::extensions::transport_sockets::tls::v3::CommonTlsContext& config,
                     bool auto_sni_san_match, const unsigned default_min_protocol_version,
                     const unsigned default_max_protocol_version,
-                    const std::string& default_cipher_suites, const std::string& default_curves,
+                    const std::string& default_cipher_suites,
+                    const std::string& default_tls13_cipher_suites,
+                    const std::string& default_curves,
                     Server::Configuration::TransportSocketFactoryContext& factory_context,
                     absl::Status& creation_status);
   Api::Api& api_;
@@ -105,6 +108,7 @@ private:
 
   const std::string alpn_protocols_;
   const std::string cipher_suites_;
+  const std::string tls13_cipher_suites_;
   const std::string ecdh_curves_;
   const std::string signature_algorithms_;
 
@@ -144,6 +148,8 @@ public:
   static const std::string DEFAULT_CIPHER_SUITES_FIPS;
   static const std::string DEFAULT_CURVES;
   static const std::string DEFAULT_CURVES_FIPS;
+  static const std::string DEFAULT_TLS13_CIPHER_SUITES;
+  static const std::string DEFAULT_TLS13_CIPHER_SUITES_FIPS;
 
   static absl::StatusOr<std::unique_ptr<ClientContextConfigImpl>>
   create(const envoy::extensions::transport_sockets::tls::v3::UpstreamTlsContext& config,

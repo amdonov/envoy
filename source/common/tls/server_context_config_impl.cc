@@ -106,6 +106,15 @@ const std::string ServerContextConfigImpl::DEFAULT_CURVES = "X25519:"
 
 const std::string ServerContextConfigImpl::DEFAULT_CURVES_FIPS = "P-256";
 
+const std::string ServerContextConfigImpl::DEFAULT_TLS13_CIPHER_SUITES =
+    "TLS_AES_128_GCM_SHA256:"
+    "TLS_AES_256_GCM_SHA384:"
+    "TLS_CHACHA20_POLY1305_SHA256";
+
+const std::string ServerContextConfigImpl::DEFAULT_TLS13_CIPHER_SUITES_FIPS =
+    "TLS_AES_128_GCM_SHA256:"
+    "TLS_AES_256_GCM_SHA384";
+
 absl::StatusOr<std::unique_ptr<ServerContextConfigImpl>> ServerContextConfigImpl::create(
     const envoy::extensions::transport_sockets::tls::v3::DownstreamTlsContext& config,
     Server::Configuration::TransportSocketFactoryContext& secret_provider_context,
@@ -124,6 +133,7 @@ ServerContextConfigImpl::ServerContextConfigImpl(
     : ContextConfigImpl(
           config.common_tls_context(), false /* auto_sni_san_match */, DEFAULT_MIN_VERSION,
           DEFAULT_MAX_VERSION, FIPS_mode() ? DEFAULT_CIPHER_SUITES_FIPS : DEFAULT_CIPHER_SUITES,
+          FIPS_mode() ? DEFAULT_TLS13_CIPHER_SUITES_FIPS : DEFAULT_TLS13_CIPHER_SUITES,
           FIPS_mode() ? DEFAULT_CURVES_FIPS : DEFAULT_CURVES, factory_context, creation_status),
       server_names_(server_names), require_client_certificate_(PROTOBUF_GET_WRAPPED_OR_DEFAULT(
                                        config, require_client_certificate, false)),

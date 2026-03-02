@@ -185,7 +185,7 @@ ContextConfigImpl::ContextConfigImpl(
     const envoy::extensions::transport_sockets::tls::v3::CommonTlsContext& config,
     bool auto_sni_san_match, const unsigned default_min_protocol_version,
     const unsigned default_max_protocol_version, const std::string& default_cipher_suites,
-    const std::string& default_curves,
+    const std::string& default_tls13_cipher_suites, const std::string& default_curves,
     Server::Configuration::TransportSocketFactoryContext& factory_context,
     absl::Status& creation_status)
     : api_(factory_context.serverFactoryContext().api()),
@@ -196,6 +196,9 @@ ContextConfigImpl::ContextConfigImpl(
       alpn_protocols_(RepeatedPtrUtil::join(config.alpn_protocols(), ",")),
       cipher_suites_(StringUtil::nonEmptyStringOrDefault(
           RepeatedPtrUtil::join(config.tls_params().cipher_suites(), ":"), default_cipher_suites)),
+      tls13_cipher_suites_(StringUtil::nonEmptyStringOrDefault(
+          RepeatedPtrUtil::join(config.tls_params().tls13_cipher_suites(), ":"),
+          default_tls13_cipher_suites)),
       ecdh_curves_(StringUtil::nonEmptyStringOrDefault(
           RepeatedPtrUtil::join(config.tls_params().ecdh_curves(), ":"), default_curves)),
       signature_algorithms_(RepeatedPtrUtil::join(config.tls_params().signature_algorithms(), ":")),
@@ -394,6 +397,15 @@ const std::string ClientContextConfigImpl::DEFAULT_CURVES = "X25519:"
 
 const std::string ClientContextConfigImpl::DEFAULT_CURVES_FIPS = "P-256";
 
+const std::string ClientContextConfigImpl::DEFAULT_TLS13_CIPHER_SUITES =
+    "TLS_AES_128_GCM_SHA256:"
+    "TLS_AES_256_GCM_SHA384:"
+    "TLS_CHACHA20_POLY1305_SHA256";
+
+const std::string ClientContextConfigImpl::DEFAULT_TLS13_CIPHER_SUITES_FIPS =
+    "TLS_AES_128_GCM_SHA256:"
+    "TLS_AES_256_GCM_SHA384";
+
 absl::StatusOr<std::unique_ptr<ClientContextConfigImpl>> ClientContextConfigImpl::create(
     const envoy::extensions::transport_sockets::tls::v3::UpstreamTlsContext& config,
     Server::Configuration::TransportSocketFactoryContext& secret_provider_context) {
@@ -411,6 +423,7 @@ ClientContextConfigImpl::ClientContextConfigImpl(
     : ContextConfigImpl(
           config.common_tls_context(), config.auto_sni_san_validation(), DEFAULT_MIN_VERSION,
           DEFAULT_MAX_VERSION, FIPS_mode() ? DEFAULT_CIPHER_SUITES_FIPS : DEFAULT_CIPHER_SUITES,
+          FIPS_mode() ? DEFAULT_TLS13_CIPHER_SUITES_FIPS : DEFAULT_TLS13_CIPHER_SUITES,
           FIPS_mode() ? DEFAULT_CURVES_FIPS : DEFAULT_CURVES, factory_context, creation_status),
       server_name_indication_(config.sni()), auto_host_sni_(config.auto_host_sni()),
       allow_renegotiation_(config.allow_renegotiation()),

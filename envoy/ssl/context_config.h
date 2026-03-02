@@ -39,6 +39,11 @@ public:
   virtual const std::string& cipherSuites() const PURE;
 
   /**
+   * The ':' delimited list of supported TLS 1.3 cipher suites
+   */
+  virtual const std::string& tls13CipherSuites() const PURE;
+
+  /**
    * The ':' delimited list of supported ECDH curves.
    */
   virtual const std::string& ecdhCurves() const PURE;
