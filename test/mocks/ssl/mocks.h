@@ -98,6 +98,7 @@ public:
 
   MOCK_METHOD(const std::string&, alpnProtocols, (), (const));
   MOCK_METHOD(const std::string&, cipherSuites, (), (const));
+  MOCK_METHOD(const std::string&, tls13CipherSuites, (), (const));
   MOCK_METHOD(const std::string&, ecdhCurves, (), (const));
   MOCK_METHOD(const std::string&, signatureAlgorithms, (), (const));
   MOCK_METHOD(std::vector<std::reference_wrapper<const TlsCertificateConfig>>, tlsCertificates, (),
@@ -143,6 +144,7 @@ public:
 
   MOCK_METHOD(const std::string&, alpnProtocols, (), (const));
   MOCK_METHOD(const std::string&, cipherSuites, (), (const));
+  MOCK_METHOD(const std::string&, tls13CipherSuites, (), (const));
   MOCK_METHOD(const std::string&, ecdhCurves, (), (const));
   MOCK_METHOD(const std::string&, signatureAlgorithms, (), (const));
   MOCK_METHOD(bool, preferClientCiphers, (), (const));
