@@ -255,7 +255,7 @@ absl::Status SPIFFEValidator::addClientValidationContext(SSL_CTX* ctx, bool) {
       continue;
     }
 
-    bssl::UniquePtr<X509_NAME> name_dup(X509_NAME_dup(name));
+    bssl::UniquePtr<X509_NAME> name_dup(X509_NAME_dup(const_cast<X509_NAME*>(name)));
     if (name_dup == nullptr || !sk_X509_NAME_push(list.get(), name_dup.release())) {
       return absl::InvalidArgumentError("Failed to load trusted client CA certificate");
     }
